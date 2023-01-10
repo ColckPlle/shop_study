@@ -53,6 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         // static 디렉터리의 하위 파일 인증 무시
+        web.ignoring().antMatchers("/favicon.ico", "/resources/**", "/error");
         web.ignoring().antMatchers("/css/**", "/js/**", "/img/**");
     }
 }

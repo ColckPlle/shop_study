@@ -4,6 +4,8 @@ import com.shop.dto.MemberFormDto;
 import com.shop.entity.Member;
 import com.shop.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,7 +30,6 @@ public class MemberController {
         model.addAttribute("memberFormDto", new MemberFormDto());
         return "member/memberForm";
     }
-
     @PostMapping(value = "/new")
     public String newMember(@Valid MemberFormDto memberFormDto, BindingResult bindingResult, Model model){
 
@@ -46,7 +47,6 @@ public class MemberController {
 
         return "redirect:/";
     }
-
     @GetMapping(value = "/login")
     public String loginMember(){
         return "/member/memberLoginForm";
