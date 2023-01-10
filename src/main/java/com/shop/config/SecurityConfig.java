@@ -38,6 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .mvcMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
         ;
+        http.exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint());
 
     }
 
