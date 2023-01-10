@@ -8,6 +8,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name="item")
@@ -47,5 +48,10 @@ public class Item {
             nullable = false
     )
     private LocalDateTime updateTime; //수정 시간
+
+    @ManyToMany
+    @JoinTable(name = "member_item", joinColumns = @JoinColumn(name = "member_id"),
+                inverseJoinColumns = @JoinColumn(name = "item_id"))
+    private List<Member> member;
 
 }
