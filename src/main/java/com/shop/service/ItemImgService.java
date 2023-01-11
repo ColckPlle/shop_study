@@ -9,8 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.util.StringUtils;
 
-import java.io.FileOutputStream;
-import java.util.UUID;
+import javax.persistence.EntityNotFoundException;
 
 @Service
 @RequiredArgsConstructor
@@ -22,37 +21,41 @@ public class ItemImgService {
 
     private final ItemImgRepository itemImgRepository;
 
-    private String generateItemImgName(String fileName) {
-
-        String extension = fileName.substring(fileName.lastIndexOf("."), fileName.length());
-        UUID uuid = UUID.randomUUID();
-        String itemImgName = uuid.toString() + extension;
-
-        return itemImgName;
-    }
+    private final FileService fileService;
 
     public void saveItemImg(ItemImg itemImg, MultipartFile itemImgFile) throws Exception{
-        if(itemImg.getId() == null || !itemImgFile.isEmpty()) {
+        String oriImgName = itemImgFile.getOriginalFilename();
+        String imgName = "";
+        String imgUrl = "";
 
-            String originalImgName = itemImgFile.getOriginalFilename();
-            String itemImgName = "";
-            String imgPath = "";
+        //파일 업로드
+        if(!StringUtils.isEmpty(oriImgName)){
+            imgName = fileService.uploadFile(itemImgLocation, oriImgName, itemImgFile.getBytes());
+            imgUrl = itemImgLocation + "/" + imgName;
+        }
 
-            //파일 업로드
-            if(!StringUtils.isEmpty(originalImgName)){
-                itemImgName = generateItemImgName(originalImgName);
-                imgPath = itemImgLocation + "/"+ itemImgName;
-                byte[] data = itemImgFile.getBytes();
-                FileOutputStream fos = new FileOutputStream(imgPath);
-                fos.write(data);
-                fos.close();
+        //상품 이미지 정보 저장
+        itemImg.updateItemImg(oriImgName, imgName, imgUrl);
+        itemImgRepository.save(itemImg);
+    }
+
+    public void updateItemImg(Long itemImgId, MultipartFile itemImgFile) throws Exception{
+        if(!itemImgFile.isEmpty()){
+            ItemImg savedItemImg = itemImgRepository.findById(itemImgId)
+                    .orElseThrow(EntityNotFoundException::new);
+
+            String imgUrl = savedItemImg.getImgUrl();
+
+            //기존 이미지 파일 삭제
+            if(!StringUtils.isEmpty(savedItemImg.getImgName())) {
+                fileService.deleteFile(imgUrl);
             }
 
-            //상품 이미지 정보 세팅
-            itemImg.setImgName(itemImgName);
-            itemImg.setOriImgName(originalImgName);
-            itemImg.setImgUrl(imgPath);
-            itemImgRepository.save(itemImg);
+            String oriImgName = itemImgFile.getOriginalFilename();
+            String imgName = fileService.uploadFile(itemImgLocation, oriImgName, itemImgFile.getBytes());
+            imgUrl = itemImgLocation + "/" + imgName;
+
+            savedItemImg.updateItemImg(oriImgName, imgName, imgUrl);
         }
     }
 
