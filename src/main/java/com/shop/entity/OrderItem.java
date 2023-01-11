@@ -1,8 +1,6 @@
 package com.shop.entity;
 
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -24,11 +22,11 @@ public class OrderItem {
     @JoinColumn(name = "order_id")
     private Order order;
 
-    private int orderPrice;
+    private int orderPrice;  //주문가격
 
-    private int count;
+    private int count;  //수량
+
     private LocalDateTime regTime;
 
-    private LocalDateTime updatedTime;
-
+    private LocalDateTime updateTime;
 }

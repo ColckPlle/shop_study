@@ -3,6 +3,7 @@ package com.shop.repository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.shop.constant.ItemSellStatus;
 import com.shop.entity.Item;
 import com.shop.entity.QItem;
 import org.junit.jupiter.api.DisplayName;
@@ -36,7 +37,7 @@ class ItemRepositoryTest {
         item.setItemNm("테스트 상품");
         item.setPrice(10000);
         item.setItemDetail("테스트 상품 상세 설명");
-        item.setSellStatCd("10");
+        item.setStockNumber(10);
         item.setRegTime(LocalDateTime.now());
         item.setUpdateTime(LocalDateTime.now());
         Item savedItem = itemRepository.save(item);
@@ -49,7 +50,7 @@ class ItemRepositoryTest {
             item.setItemNm("테스트 상품" + i);
             item.setPrice(10000 + i);
             item.setItemDetail("테스트 상품 상세 설명" + i);
-            item.setSellStatCd("10");
+            item.setStockNumber(10);
             item.setRegTime(LocalDateTime.now());
             item.setUpdateTime(LocalDateTime.now());
             Item savedItem = itemRepository.save(item);
@@ -140,7 +141,7 @@ class ItemRepositoryTest {
             item.setItemNm("테스트 상품" + i);
             item.setPrice(10000 + i);
             item.setItemDetail("테스트 상품 상세 설명" + i);
-            item.setSellStatCd("10");
+            item.setItemSellStatus(ItemSellStatus.SELL);
             item.setRegTime(LocalDateTime.now());
             item.setUpdateTime(LocalDateTime.now());
             itemRepository.save(item);
@@ -151,7 +152,7 @@ class ItemRepositoryTest {
             item.setItemNm("테스트 상품" + i);
             item.setPrice(10000 + i);
             item.setItemDetail("테스트 상품 상세 설명" + i);
-            item.setSellStatCd("20");
+            item.setItemSellStatus(ItemSellStatus.SELL);
             item.setRegTime(LocalDateTime.now());
             item.setUpdateTime(LocalDateTime.now());
             itemRepository.save(item);
