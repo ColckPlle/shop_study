@@ -2,6 +2,7 @@ package com.shop.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.aspectj.weaver.ast.Or;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -25,5 +26,19 @@ public class OrderItem extends BaseEntity {
     private int orderPrice;  //주문가격
 
     private int count;  //수량
+
+    public static OrderItem creatOrderItem(Item item,int count){
+        OrderItem orderItem = new OrderItem();
+        orderItem.setItem(item);
+        orderItem.setCount(count);
+        orderItem.setOrderPrice(item.getPrice());
+
+        item.removeStock(count);
+        return orderItem;
+    }
+
+    public int getTotalPrice(){
+        return orderPrice*count;
+    }
 
 }
