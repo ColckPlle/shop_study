@@ -3,6 +3,8 @@ package com.shop.entity;
 import com.shop.constant.OrderStatus;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.util.StringUtils;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -46,6 +48,13 @@ public class Order extends  BaseEntity{
         order.setOrderDate(LocalDateTime.now());
         return order;
     }
+    public void cancelOrder(){
+        this.orderStatus = OrderStatus.CANCEL;
+
+        for(OrderItem orderItem: orderItems){
+            orderItem.cancel();
+        }
+    }
 
     public int getTotalPrice(){
         int totalPrice = 0;
@@ -54,5 +63,6 @@ public class Order extends  BaseEntity{
         }
         return totalPrice;
     }
+
 
 }
