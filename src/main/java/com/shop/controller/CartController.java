@@ -1,5 +1,6 @@
 package com.shop.controller;
 
+import com.shop.dto.CartDetailDto;
 import com.shop.dto.CartItemDto;
 import com.shop.service.CartService;
 import lombok.RequiredArgsConstructor;
@@ -44,6 +45,14 @@ public class CartController {
         }
 
         return new ResponseEntity<Long>(cartItemId, HttpStatus.OK);
+    }
+
+
+    @GetMapping(value = "/cart")
+    public String orderHist(Principal principal, Model model){
+        List<CartDetailDto> cartDetailList = cartService.getCartList(principal.getName());
+        model.addAttribute("cartItems", cartDetailList);
+        return "cart/cartList";
     }
 
 
